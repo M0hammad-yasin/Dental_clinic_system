@@ -207,9 +207,52 @@ namespace Dclinic__system
 
         private void button1_Click_1(object sender, EventArgs e)
         {
+            // Input Validations
+            if (string.IsNullOrWhiteSpace(PatNameTb.Text))
+            {
+                MessageBox.Show("Please enter the patient's name.");
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(textBox3.Text) || !textBox3.Text.All(char.IsDigit) || textBox3.Text.Length != 10)
+            {
+                MessageBox.Show("Please enter a valid 10-digit phone number.");
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(AddressTb.Text))
+            {
+                MessageBox.Show("Please enter the patient's address.");
+                return;
+            }
+
+            if (DOBDate.Value.Date >= DateTime.Now.Date)
+            {
+                MessageBox.Show("Please select a valid date of birth.");
+                return;
+            }
+
+            if (GenderCb.SelectedItem == null || string.IsNullOrWhiteSpace(GenderCb.SelectedItem.ToString()))
+            {
+                MessageBox.Show("Please select the patient's gender.");
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(AllergyTb.Text))
+            {
+                MessageBox.Show("Please enter allergies information or 'None' if no allergies.");
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(CnicTb.Text) || CnicTb.Text.Length != 13 || !CnicTb.Text.All(char.IsDigit))
+            {
+                MessageBox.Show("Please enter a valid 13-digit CNIC.");
+                return;
+            }
+
             SqlConnection Con = new SqlConnection("Data Source=ZAIN-KHAN\\SQLEXPYASIN;Initial Catalog=Al_shifa;Integrated Security=True;Persist Security Info=False;Pooling=False;");
             Con.Open();
-            SqlCommand cmd = new SqlCommand("insert into PatientTbl values (@PatName,@PatPhone,@PatAddress,@PatDOB,@PatGender, @PAtAllergies,@Cnic)", Con);
+            SqlCommand cmd = new SqlCommand("insert into PatientTbl values (@PatName,@PatPhone,@PatAddress,@PatDOB,@PatGender,@PatAllergies,@Cnic)", Con);
             cmd.Parameters.AddWithValue("@PatName", PatNameTb.Text);
             cmd.Parameters.AddWithValue("@PatPhone", textBox3.Text);
             cmd.Parameters.AddWithValue("@PatAddress", AddressTb.Text);
@@ -218,11 +261,12 @@ namespace Dclinic__system
             cmd.Parameters.AddWithValue("@PatAllergies", AllergyTb.Text);
             cmd.Parameters.AddWithValue("@Cnic", CnicTb.Text);
             cmd.ExecuteNonQuery();
-            MessageBox.Show("successfully Added");
+            MessageBox.Show("Successfully Added");
             BindGrid();
             Cleardata();
             Con.Close();
         }
+
 
         private void CnicTb_TextChanged(object sender, EventArgs e)
         {
