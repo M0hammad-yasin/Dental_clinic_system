@@ -64,7 +64,8 @@ namespace Dclinic__system
 
             try
             {
-                Pat.AddPatient(Query);
+                Users users = new Users();
+                users.AddPatient(Query);
                 MessageBox.Show("User Successfully Added");
                 Populate();
             }
@@ -113,6 +114,7 @@ namespace Dclinic__system
                     Pat.DeletePatient(Query);
                     MessageBox.Show("User Deleted SUCCESSFULLY");
                     Populate();
+                    Key = 0;
                 }
                 catch (Exception EX)
                 {
@@ -167,17 +169,18 @@ namespace Dclinic__system
 
         private void UserDGV_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (MessageBox.Show("Are you sure to delete?", "Delete record", MessageBoxButtons.YesNo) == DialogResult.Yes)
-            {
-                int id = Convert.ToInt32(UserDGV.Rows[e.RowIndex].Cells["UId"].FormattedValue.ToString());
-                SqlConnection Con = new SqlConnection("Data Source=ZAIN-KHAN\\SQLEXPYASIN;Initial Catalog=Al_shifa;Integrated Security=True;Persist Security Info=False;Pooling=False;");
-                Con.Open();
-                SqlCommand cmd = new SqlCommand("Delete  UserTbl where UId='" + id + "' ", Con);
-                cmd.ExecuteNonQuery();
-                MessageBox.Show("deleted Successfully");
-                BindGrid();
-                Con.Close();
-            }
+            Key = Convert.ToInt32(UserDGV.Rows[e.RowIndex].Cells["UId"].FormattedValue.ToString());
+            //if (MessageBox.Show("Are you sure to delete?", "Delete record", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            //{
+            //    int id = Convert.ToInt32(UserDGV.Rows[e.RowIndex].Cells["UId"].FormattedValue.ToString());
+            //    SqlConnection Con = new SqlConnection("Data Source=ZAIN-KHAN\\SQLEXPYASIN;Initial Catalog=Al_shifa;Integrated Security=True;Persist Security Info=False;Pooling=False;");
+            //    Con.Open();
+            //    SqlCommand cmd = new SqlCommand("Delete  UserTbl where UId='" + id + "' ", Con);
+            //    cmd.ExecuteNonQuery();
+            //    MessageBox.Show("deleted Successfully");
+            //    BindGrid();
+            //    Con.Close();
+            //}
         }
     }
 }
