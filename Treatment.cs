@@ -87,6 +87,7 @@ namespace Dclinic__system
                     Pat.DeletePatient(Query);
                     MessageBox.Show("Treatment Deleted SUCCESSFULLY");
                     Populate();
+                    Key = 0;
                 }
                 catch (Exception EX)
                 {
@@ -128,7 +129,9 @@ namespace Dclinic__system
 
         private void label5_Click(object sender, EventArgs e)
         {
-
+            User prec = new User();
+            prec.Show();
+            this.Hide();
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -169,17 +172,18 @@ namespace Dclinic__system
 
         private void TreatmentDGV_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (MessageBox.Show("Are you sure to delete?", "Delete record", MessageBoxButtons.YesNo) == DialogResult.Yes)
-            {
-                int id = Convert.ToInt32(TreatmentDGV.Rows[e.RowIndex].Cells["TreatId"].FormattedValue.ToString());
-                SqlConnection Con = new SqlConnection("Data Source=ZAIN-KHAN\\SQLEXPYASIN;Initial Catalog=Al_shifa;Integrated Security=True;Persist Security Info=False;Pooling=False;");
-                Con.Open();
-                SqlCommand cmd = new SqlCommand("Delete  TreatmentTbl where TreatId='" + id + "' ", Con);
-                cmd.ExecuteNonQuery();
-                MessageBox.Show("deleted Successfully");
-                BindGrid();
-                Con.Close();
-            }
+            Key = Convert.ToInt32(TreatmentDGV.Rows[e.RowIndex].Cells[0].FormattedValue.ToString());
+            //if (MessageBox.Show("Are you sure to delete?", "Delete record", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            //{
+            //    int id = Convert.ToInt32(TreatmentDGV.Rows[e.RowIndex].Cells["TreatId"].FormattedValue.ToString());
+            //    SqlConnection Con = new SqlConnection("Data Source=ZAIN-KHAN\\SQLEXPYASIN;Initial Catalog=Al_shifa;Integrated Security=True;Persist Security Info=False;Pooling=False;");
+            //    Con.Open();
+            //    SqlCommand cmd = new SqlCommand("Delete  TreatmentTbl where TreatId='" + id + "' ", Con);
+            //    cmd.ExecuteNonQuery();
+            //    MessageBox.Show("deleted Successfully");
+            //    BindGrid();
+            //    Con.Close();
+            //}
         }
     }
 }

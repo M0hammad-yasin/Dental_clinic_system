@@ -289,7 +289,6 @@
             this.CnicTb.Name = "CnicTb";
             this.CnicTb.Size = new System.Drawing.Size(337, 50);
             this.CnicTb.TabIndex = 29;
-            this.CnicTb.TextChanged += new System.EventHandler(this.CnicTb_TextChanged);
             // 
             // button2
             // 
@@ -482,7 +481,6 @@
             this.Controls.Add(this.label9);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "Patient";
             this.Text = "Patient";

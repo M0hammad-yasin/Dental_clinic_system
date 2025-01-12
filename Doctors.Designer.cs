@@ -199,6 +199,7 @@
             this.label7.Size = new System.Drawing.Size(110, 33);
             this.label7.TabIndex = 47;
             this.label7.Text = "LogOut";
+            this.label7.Click += new System.EventHandler(this.label7_Click);
             // 
             // label16
             // 
@@ -285,6 +286,7 @@
             this.button2.TabIndex = 27;
             this.button2.Text = "Delete";
             this.button2.UseVisualStyleBackColor = false;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // label15
             // 
@@ -417,7 +419,6 @@
             this.Controls.Add(this.DDGV);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "Doctors";
             this.Text = "Form1";

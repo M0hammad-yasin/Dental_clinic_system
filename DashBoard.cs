@@ -47,5 +47,10 @@ namespace Dclinic__system
             doc.Show();
             this.Hide();
         }
+
+        private void Pendinglbl_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -23,26 +23,67 @@ namespace Dclinic__system
 
 
         SqlConnection Con = new SqlConnection("Data Source=ZAIN-KHAN\\SQLEXPYASIN;Initial Catalog=Al_shifa;Integrated Security=True;Persist Security Info=False;Pooling=False;");
+        int key = 0;
+        private void button1_Click(object sender, EventArgs e){
+    // Check if any required field is empty
+    if (string.IsNullOrWhiteSpace(DocNameTb.Text))
+    {
+        MessageBox.Show("Doctor Name is required.");
+        return;
+    }
 
-        private void button1_Click(object sender, EventArgs e)
-            {
-             Con.Open();
-          
-             SqlCommand cmd = new SqlCommand("insert into DoctorTbl values (@DocName,@DocGEN,@DocPHONE,@DocAdd, @Docemail)", Con);
-            cmd.Parameters.AddWithValue("@DocName", DocNameTb.Text);
-          
-            cmd.Parameters.AddWithValue("@DocGEN", GenderCb.SelectedItem.ToString());
-            cmd.Parameters.AddWithValue("@DocPHONE",DocPhone.Text);
-            cmd.Parameters.AddWithValue("@DocAdd", DocAddressTb.Text);
-            cmd.Parameters.AddWithValue("@Docemail", emailTb.Text);
-            cmd.ExecuteNonQuery();
-            Con.Close();
-            MessageBox.Show("successfully Added");
-            clear();
-            loadrecord();
+    if (GenderCb.SelectedItem == null)
+    {
+        MessageBox.Show("Please select a gender.");
+        return;
+    }
 
-        
-        }
+    if (string.IsNullOrWhiteSpace(DocPhone.Text) || !System.Text.RegularExpressions.Regex.IsMatch(DocPhone.Text, @"^\d{10}$"))
+    {
+        MessageBox.Show("Please enter a valid 10-digit phone number.");
+        return;
+    }
+
+    if (string.IsNullOrWhiteSpace(DocAddressTb.Text))
+    {
+        MessageBox.Show("Address is required.");
+        return;
+    }
+
+    if (string.IsNullOrWhiteSpace(emailTb.Text) || !System.Text.RegularExpressions.Regex.IsMatch(emailTb.Text, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+    {
+        MessageBox.Show("Please enter a valid email address.");
+        return;
+    }
+
+    try
+    {
+        Con.Open();
+
+        SqlCommand cmd = new SqlCommand("insert into DoctorTbl values (@DocName,@DocGEN,@DocPHONE,@DocAdd, @Docemail)", Con);
+        cmd.Parameters.AddWithValue("@DocName", DocNameTb.Text);
+        cmd.Parameters.AddWithValue("@DocGEN", GenderCb.SelectedItem.ToString());
+        cmd.Parameters.AddWithValue("@DocPHONE", DocPhone.Text);
+        cmd.Parameters.AddWithValue("@DocAdd", DocAddressTb.Text);
+        cmd.Parameters.AddWithValue("@Docemail", emailTb.Text);
+
+        cmd.ExecuteNonQuery();
+        MessageBox.Show("Successfully Added");
+
+        // Clear and reload records
+        clear();
+        loadrecord();
+    }
+    catch (Exception ex)
+    {
+        MessageBox.Show($"Error: {ex.Message}");
+    }
+    finally
+    {
+        Con.Close();
+    }
+}
+
         SqlConnection con = new SqlConnection("Data Source=ZAIN-KHAN\\SQLEXPYASIN;Initial Catalog=Al_shifa;Integrated Security=True;Persist Security Info=False;Pooling=False;");
 
         void loadrecord()
@@ -172,22 +213,60 @@ namespace Dclinic__system
 
         private void DDGV_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (MessageBox.Show("Are you sure to delete?", "Delete record", MessageBoxButtons.YesNo) == DialogResult.Yes) 
-            {
-                int id = Convert.ToInt32(DDGV.Rows[e.RowIndex].Cells["DocId"].FormattedValue.ToString());
-                SqlConnection Con = new SqlConnection("Data Source=ZAIN-KHAN\\SQLEXPYASIN;Initial Catalog=Al_shifa;Integrated Security=True;Persist Security Info=False;Pooling=False;");
-                Con.Open();
-                SqlCommand cmd = new SqlCommand("Delete  DoctorTbl where DocId='" + id + "' ", Con);
-                cmd.ExecuteNonQuery();
-                MessageBox.Show("deleted Successfully");
-                BindGrid();
-                Con.Close();
-            }
+            key = Convert.ToInt32(DDGV.SelectedRows[0].Cells[0].Value.ToString());
+            //if (MessageBox.Show("Are you sure to delete?", "Delete record", MessageBoxButtons.YesNo) == DialogResult.Yes) 
+            //{
+            //    int id = Convert.ToInt32(DDGV.Rows[e.RowIndex].Cells["DocId"].FormattedValue.ToString());
+            //    SqlConnection Con = new SqlConnection("Data Source=ZAIN-KHAN\\SQLEXPYASIN;Initial Catalog=Al_shifa;Integrated Security=True;Persist Security Info=False;Pooling=False;");
+            //    Con.Open();
+            //    SqlCommand cmd = new SqlCommand("Delete  DoctorTbl where DocId='" + id + "' ", Con);
+            //    cmd.ExecuteNonQuery();
+            //    MessageBox.Show("deleted Successfully");
+            //    BindGrid();
+            //    Con.Close();
+            //}
         }
 
         private void Doctors_Load(object sender, EventArgs e)
         {
             loadrecord();
+        }
+
+        private void label7_Click(object sender, EventArgs e)
+        {
+            Login user = new Login();
+            user.Show();
+            this.Hide();
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if (key == 0)
+            {
+                MessageBox.Show("Select the Doctor to Update");
+            }
+            else
+            {
+                try
+                {
+                    SqlConnection Con = new SqlConnection("Data Source=ZAIN-KHAN\\SQLEXPYASIN;Initial Catalog=Al_shifa;Integrated Security=True;Persist Security Info=False;Pooling=False;");
+                    Con.Open();
+                    SqlCommand cmd = new SqlCommand("Delete  DoctorTbl where DocId='" + key + "' ", Con);
+                    cmd.ExecuteNonQuery();
+                    MessageBox.Show("deleted Successfully");
+                    BindGrid();
+                    Con.Close();
+                    loadrecord();
+                    clear();
+                    key = 0;
+                }
+                catch (Exception Ex)
+                {
+                    MessageBox.Show(Ex.Message);
+                }
+            }
+           
         }
     }
 }

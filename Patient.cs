@@ -93,6 +93,8 @@ namespace Dclinic__system
                     Pat.DeletePatient(Query);
                     MessageBox.Show("Patient Deleted SUCCESSFULLY");
                     Populate();
+                    Key = 0;
+
                 }
                 catch (Exception EX)
                 {
@@ -192,61 +194,79 @@ namespace Dclinic__system
 
         private void PatientDGV_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (MessageBox.Show("Are you sure to delete?", "Delete record", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            Key = Convert.ToInt32(PatientDGV.Rows[e.RowIndex].Cells[0].Value.ToString());
+            //if (MessageBox.Show("Are you sure to delete?", "Delete record", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            //{
+            //    int id = Convert.ToInt32(PatientDGV.Rows[e.RowIndex].Cells["PatId"].FormattedValue.ToString());
+            //    SqlConnection Con = new SqlConnection("Data Source=ZAIN-KHAN\\SQLEXPYASIN;Initial Catalog=Al_shifa;Integrated Security=True;Persist Security Info=False;Pooling=False;");
+            //    Con.Open();
+            //    SqlCommand cmd = new SqlCommand("Delete  PatientTbl where PatId='" + id + "' ", Con);
+            //    cmd.ExecuteNonQuery();
+            //    MessageBox.Show("deleted Successfully");
+            //    BindGrid();
+            //    Con.Close();
+            //}
+        }
+        private bool patientValidation()
+        {
+            // Patient Name Validation
+            if (string.IsNullOrWhiteSpace(PatNameTb.Text))
             {
-                int id = Convert.ToInt32(PatientDGV.Rows[e.RowIndex].Cells["PatId"].FormattedValue.ToString());
-                SqlConnection Con = new SqlConnection("Data Source=ZAIN-KHAN\\SQLEXPYASIN;Initial Catalog=Al_shifa;Integrated Security=True;Persist Security Info=False;Pooling=False;");
-                Con.Open();
-                SqlCommand cmd = new SqlCommand("Delete  PatientTbl where PatId='" + id + "' ", Con);
-                cmd.ExecuteNonQuery();
-                MessageBox.Show("deleted Successfully");
-                BindGrid();
-                Con.Close();
+                MessageBox.Show("Please enter the patient's name.");
+                return false;
             }
+
+            // Phone Number Validation
+            if (string.IsNullOrWhiteSpace(textBox3.Text) || !textBox3.Text.All(char.IsDigit) || textBox3.Text.Length != 10)
+            {
+                MessageBox.Show("Please enter a valid 10-digit phone number.");
+                return false;
+            }
+
+            // Address Validation
+            if (string.IsNullOrWhiteSpace(AddressTb.Text))
+            {
+                MessageBox.Show("Please enter the patient's address.");
+                return false;
+            }
+
+            // Date of Birth Validation
+            if (DOBDate.Value.Date >= DateTime.Now.Date)
+            {
+                MessageBox.Show("Please select a valid date of birth.");
+                return false;
+            }
+
+            // Gender Validation
+            if (GenderCb.SelectedItem == null || string.IsNullOrWhiteSpace(GenderCb.SelectedItem.ToString()))
+            {
+                MessageBox.Show("Please select the patient's gender.");
+                return false;
+            }
+
+            // Allergy Information Validation
+            if (string.IsNullOrWhiteSpace(AllergyTb.Text))
+            {
+                MessageBox.Show("Please enter allergies information or 'None' if no allergies.");
+                return false;
+            }
+
+            // CNIC Validation
+            if (string.IsNullOrWhiteSpace(CnicTb.Text) || CnicTb.Text.Length != 13 || !CnicTb.Text.All(char.IsDigit))
+            {
+                MessageBox.Show("Please enter a valid 13-digit CNIC.");
+                return false;
+            }
+
+            // All validations passed
+            return true;
         }
 
         private void button1_Click_1(object sender, EventArgs e)
         {
-            // Input Validations
-            if (string.IsNullOrWhiteSpace(PatNameTb.Text))
+            if(!patientValidation())
             {
-                MessageBox.Show("Please enter the patient's name.");
-                return;
-            }
 
-            if (string.IsNullOrWhiteSpace(textBox3.Text) || !textBox3.Text.All(char.IsDigit) || textBox3.Text.Length != 10)
-            {
-                MessageBox.Show("Please enter a valid 10-digit phone number.");
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(AddressTb.Text))
-            {
-                MessageBox.Show("Please enter the patient's address.");
-                return;
-            }
-
-            if (DOBDate.Value.Date >= DateTime.Now.Date)
-            {
-                MessageBox.Show("Please select a valid date of birth.");
-                return;
-            }
-
-            if (GenderCb.SelectedItem == null || string.IsNullOrWhiteSpace(GenderCb.SelectedItem.ToString()))
-            {
-                MessageBox.Show("Please select the patient's gender.");
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(AllergyTb.Text))
-            {
-                MessageBox.Show("Please enter allergies information or 'None' if no allergies.");
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(CnicTb.Text) || CnicTb.Text.Length != 13 || !CnicTb.Text.All(char.IsDigit))
-            {
-                MessageBox.Show("Please enter a valid 13-digit CNIC.");
                 return;
             }
 
@@ -266,35 +286,52 @@ namespace Dclinic__system
             Cleardata();
             Con.Close();
         }
-
-
-        private void CnicTb_TextChanged(object sender, EventArgs e)
-        {
-           
-            Regex regex = new Regex(@"^[0-9]{5}-[0-9]{7}-[0-9]{1}$");
-
-          
-            if (!regex.IsMatch(CnicTb.Text))
-            {
-                errorProvider1.SetError(CnicTb, "Invalid CNIC format. Please enter a valid CNIC number.");
-            }
-            else
-            {
-                errorProvider1.Clear();
-            }
-        }
-        int id = 0;
         private void button3_Click(object sender, EventArgs e)
         {
-          /*  SqlConnection Con = new SqlConnection("Data Source=ZAIN-KHAN\\SQLEXPYASIN;Initial Catalog=Al_shifa;Integrated Security=True;Persist Security Info=False;Pooling=False;");
-            Con.Open();
-            SqlCommand cmd = new SqlCommand("update  PatientTbl set PatName=@PatName,PatPhone=@PatPhone,PatAddress=@PatAddress,PatDOB=@PatDOB,PAtGender=@PatGender, PAtAllergies=@PAtAllergies ,Cnic=@Cnic where PatId=" + id + "", Con);
+            if (Key == 0)
+            {
+                MessageBox.Show("Select The Patient");
+                return;
+            }
 
-            cmd.ExecuteNonQuery();
+            if (!patientValidation())
+            {
+                return;
+            }
 
-            MessageBox.Show("successfully Updated");            Cleardata();
-            Con.Close();*/
+            try
+            {
+                SqlConnection Con = new SqlConnection("Data Source=ZAIN-KHAN\\SQLEXPYASIN;Initial Catalog=Al_shifa;Integrated Security=True;Persist Security Info=False;Pooling=False;");
+                Con.Open();
+
+                // SQL command with parameters
+                SqlCommand cmd = new SqlCommand("update PatientTbl set PatName=@PatName, PatPhone=@PatPhone, PatAddress=@PatAddress, PatDOB=@PatDOB, PatGender=@PatGender, PatAllergies=@PatAllergies, Cnic=@Cnic where PatId=@PatId", Con);
+
+                // Add parameter values
+                cmd.Parameters.AddWithValue("@PatName", PatNameTb.Text);
+                cmd.Parameters.AddWithValue("@PatPhone", textBox3.Text);
+                cmd.Parameters.AddWithValue("@PatAddress", AddressTb.Text);
+                cmd.Parameters.AddWithValue("@PatDOB", DOBDate.Value.Date);
+                cmd.Parameters.AddWithValue("@PatGender", GenderCb.SelectedItem.ToString());
+                cmd.Parameters.AddWithValue("@PatAllergies", AllergyTb.Text);
+                cmd.Parameters.AddWithValue("@Cnic", CnicTb.Text);
+                cmd.Parameters.AddWithValue("@PatId", Key);
+
+                cmd.ExecuteNonQuery();
+
+                MessageBox.Show("Successfully Updated");
+                BindGrid();
+                Cleardata();
+                Key = 0;
+                Con.Close();
+
+            }
+            catch (Exception Ex)
+            {
+                MessageBox.Show(Ex.Message);
+            }
         }
+
 
 
         /*  int id = 0;
@@ -313,5 +350,5 @@ Con.Close();
 }*/
     }
 
-       
+
 }

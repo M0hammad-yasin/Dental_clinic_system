@@ -54,12 +54,16 @@ namespace Dclinic__system
 
         private void label3_Click(object sender, EventArgs e)
         {
-
+            Treatment pat = new Treatment();
+            pat.Show();
+            this.Hide();
         }
 
         private void label7_Click(object sender, EventArgs e)
         {
-
+            Login pat = new Login();
+            pat.Show();
+            this.Hide();
         }
         //void Populate()
         //{
@@ -160,6 +164,7 @@ namespace Dclinic__system
                     String Query = " Delete  from PrescriptionTbl Where PrescId=" + key + "";
                     Pat.DeletePatient(Query);
                     MessageBox.Show(" Deleted SUCCESSFULLY");
+                    key= 0;
                     Populate();
                 }
                 catch (Exception EX)
@@ -183,17 +188,30 @@ namespace Dclinic__system
 
         private void PresDGV_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (MessageBox.Show("Are you sure to delete?", "Delete record", MessageBoxButtons.YesNo) == DialogResult.Yes)
-            {
-                int id = Convert.ToInt32(PresDGV.Rows[e.RowIndex].Cells["PrescId"].FormattedValue.ToString());
-                SqlConnection Con = new SqlConnection("Data Source=ZAIN-KHAN\\SQLEXPYASIN;Initial Catalog=Al_shifa;Integrated Security=True;Persist Security Info=False;Pooling=False;");
-                Con.Open();
-                SqlCommand cmd = new SqlCommand("Delete  PrescriptionTbl where PrescId='" + id + "' ", Con);
-                cmd.ExecuteNonQuery();
-                MessageBox.Show("deleted Successfully");
-                BindGrid();
-                Con.Close();
-            }
+            key = Convert.ToInt32(PresDGV.Rows[e.RowIndex].Cells[0].Value.ToString());
+            //if (MessageBox.Show("Are you sure to delete?", "Delete record", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            //{
+            //    int id = Convert.ToInt32(PresDGV.Rows[e.RowIndex].Cells["PrescId"].FormattedValue.ToString());
+            //    SqlConnection Con = new SqlConnection("Data Source=ZAIN-KHAN\\SQLEXPYASIN;Initial Catalog=Al_shifa;Integrated Security=True;Persist Security Info=False;Pooling=False;");
+            //    Con.Open();
+            //    SqlCommand cmd = new SqlCommand("Delete  PrescriptionTbl where PrescId='" + id + "' ", Con);
+            //    cmd.ExecuteNonQuery();
+            //    MessageBox.Show("deleted Successfully");
+            //    BindGrid();
+            //    Con.Close();
+            //}
+        }
+
+        private void label6_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+            User pat = new User();
+            pat.Show();
+            this.Hide();
         }
     }
 }

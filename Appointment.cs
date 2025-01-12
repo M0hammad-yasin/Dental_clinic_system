@@ -153,6 +153,7 @@ namespace Dclinic__system
                     Pat.DeletePatient(Query);
                     MessageBox.Show("Appointment Deleted SUCCESSFULLY");
                     Populate();
+                    Key = 0;
                 }
                 catch (Exception EX)
                 {
@@ -215,17 +216,19 @@ namespace Dclinic__system
 
         private void AppointmentDGV_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (MessageBox.Show("Are you sure to delete?", "Delete record", MessageBoxButtons.YesNo) == DialogResult.Yes)
-            {
-                int id = Convert.ToInt32(AppointmentDGV.Rows[e.RowIndex].Cells["ApId"].FormattedValue.ToString());
-                SqlConnection Con = new SqlConnection("Data Source=ZAIN-KHAN\\SQLEXPYASIN;Initial Catalog=Al_shifa;Integrated Security=True;Persist Security Info=False;Pooling=False;");
-                Con.Open();
-                SqlCommand cmd = new SqlCommand("Delete  AppointmentTbl where ApId='" + id + "' ", Con);
-                cmd.ExecuteNonQuery();
-                MessageBox.Show("deleted Successfully");
-                BindGrid();
-                Con.Close();
-            }
+
+            Key = Convert.ToInt32(AppointmentDGV.Rows[e.RowIndex].Cells["ApId"].FormattedValue.ToString());
+            //if (MessageBox.Show("Are you sure to delete?", "Delete record", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            //{
+            //    int id = Convert.ToInt32(AppointmentDGV.Rows[e.RowIndex].Cells["ApId"].FormattedValue.ToString());
+            //    SqlConnection Con = new SqlConnection("Data Source=ZAIN-KHAN\\SQLEXPYASIN;Initial Catalog=Al_shifa;Integrated Security=True;Persist Security Info=False;Pooling=False;");
+            //    Con.Open();
+            //    SqlCommand cmd = new SqlCommand("Delete  AppointmentTbl where ApId='" + id + "' ", Con);
+            //    cmd.ExecuteNonQuery();
+            //    MessageBox.Show("deleted Successfully");
+            //    BindGrid();
+            //    Con.Close();
+            //}
         }
 
         private void label3_Click_1(object sender, EventArgs e)
@@ -233,6 +236,32 @@ namespace Dclinic__system
             Patient pat = new Patient();
             pat.Show();
             this.Hide();
+        }
+
+        private void label4_Click_1(object sender, EventArgs e)
+        {
+            Doctors pat = new Doctors();
+            pat.Show();
+            this.Hide();
+        }
+
+        private void label6_Click_1(object sender, EventArgs e)
+        {
+            prescription pat = new prescription();
+            pat.Show();
+            this.Hide();
+        }
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+            User pat = new User();
+            pat.Show();
+            this.Hide();
+        }
+
+        private void AppointmentDGV_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }

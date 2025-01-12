@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -39,21 +40,42 @@ namespace Dclinic__system
 
         private void button1_Click(object sender, EventArgs e)
         {
+            // Input Validation
+            if (string.IsNullOrWhiteSpace(UNameTb.Text))
+            {
+                MessageBox.Show("Please enter a username.");
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(UpswTb.Text) || UpswTb.Text.Length < 6)
+            {
+                MessageBox.Show("Please enter a valid password. Password must be at least 6 characters long.");
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(PhoneTb.Text) || !PhoneTb.Text.All(char.IsDigit) || PhoneTb.Text.Length != 10)
+            {
+                MessageBox.Show("Please enter a valid 10-digit phone number.");
+                return;
+            }
+
+            // SQL Query
             String Query = "insert into UserTbl values  ( '" + UNameTb.Text + "','" + UpswTb.Text + "','" + PhoneTb.Text + "')";
-            MyPatient Pat = new MyPatient();
+
             try
             {
                 Pat.AddPatient(Query);
-                MessageBox.Show("User Suucessfully Added");
+                MessageBox.Show("User Successfully Added");
                 Populate();
-
             }
             catch (Exception Ex)
             {
                 MessageBox.Show(Ex.Message);
             }
+
             clear();
         }
+
         int Key = 0;
         private void UserDGV_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
