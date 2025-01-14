@@ -35,5 +35,10 @@ namespace Dclinic__system
         {
             timer1.Start();
         }
+
+        private void Myprogress_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

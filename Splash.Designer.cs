@@ -55,6 +55,7 @@
             resources.ApplyResources(this.Myprogress, "Myprogress");
             this.Myprogress.Name = "Myprogress";
             this.Myprogress.UseWaitCursor = true;
+            this.Myprogress.Click += new System.EventHandler(this.Myprogress_Click);
             // 
             // timer1
             // 
